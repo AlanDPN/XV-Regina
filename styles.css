@@ -323,11 +323,13 @@ code {
 
 .carousel-image {
   width: 100%;
-  height: 260px;
-  object-fit: cover;
+  height: auto;
+  max-height: min(70vh, 560px);
+  object-fit: contain;
   border-radius: 12px;
   border: 1px solid var(--line);
-  background: #000;
+  background: color-mix(in srgb, var(--surface) 88%, #000);
+  display: block;
 }
 
 .carousel-btn {
@@ -384,6 +386,6 @@ code {
   }
 
   .carousel-image {
-    height: 210px;
+    max-height: min(56vh, 420px);
   }
 }
