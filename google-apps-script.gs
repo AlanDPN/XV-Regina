@@ -6,7 +6,7 @@
  * 4) Pega la URL en DRIVE_WEB_APP_URL dentro de app.js.
  */
 
-const FOLDER_ID = "14KNPO4zHFgP_0mVdQIwEdcEplcMDRNFu?hl";
+const FOLDER_ID = "14KNPO4zHFgP_0mVdQIwEdcEplcMDRNFu";
 const SHEET_ID = "1QExLRjC5hAeR7pZVi6iTkzEo7NmToBt0PSCKyZcPVig";
 const SHEET_NAME = "photos";
 
