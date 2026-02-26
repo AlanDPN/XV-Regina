@@ -1,83 +1,81 @@
 ﻿<!doctype html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>XV de Regina - Album</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css" />
-  </head>
-  <body>
-    <div id="loginOverlay" class="overlay">
-      <div class="login-card">
-        <h1>XV de Regina</h1>
-        <p>Antes de entrar, escribe tu nombre para identificar tus fotos.</p>
-        <form id="loginForm">
-          <label for="loginGuestName">Tu nombre</label>
-          <input id="loginGuestName" type="text" placeholder="Ej. Sofia" required />
-          <button type="submit" class="btn">Entrar</button>
-          <p id="loginStatus" class="status" aria-live="polite"></p>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>XV de Regina - Album</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&family=Playfair+Display:wght@600;700&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+  <div id="loginOverlay" class="overlay">
+    <div class="login-card">
+      <h1>XV de Regina</h1>
+      <p>Antes de entrar, escribe tu nombre para identificar tus fotos.</p>
+      <form id="loginForm">
+        <label for="loginGuestName">Tu nombre</label>
+        <input id="loginGuestName" type="text" placeholder="Ej. Sofia" required />
+        <button type="submit" class="btn">Entrar</button>
+        <p id="loginStatus" class="status" aria-live="polite"></p>
+      </form>
+    </div>
+  </div>
+
+  <header class="topbar">
+    <div class="brand">XV de Regina</div>
+    <nav>
+      <button class="nav-link is-active" data-section="inicio">Inicio</button>
+      <button class="nav-link" data-section="subir">Sube tus imagenes</button>
+      <button class="nav-link" data-section="album">Album</button>
+    </nav>
+    <div id="guestBadge" class="guest-badge"></div>
+  </header>
+
+  <main>
+    <section id="inicio" class="view is-active">
+      <div class="hero">
+        <h2>XV de Regina</h2>
+        <p>Comparte tus mejores momentos de la fiesta.</p>
+        <img src="https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1600&auto=format&fit=crop"
+          alt="Celebracion XV" />
+      </div>
+    </section>
+
+    <section id="subir" class="view">
+      <div class="card">
+        <h2>Sube tus imagenes</h2>
+        <p class="muted">Tus fotos se guardarán con el nombre del invitado que inició sesión.</p>
+
+        <form id="uploadForm">
+          <label for="guestName">Nombre del invitado</label>
+          <input id="guestName" name="guestName" type="text" readonly />
+
+          <label for="photoFiles">Selecciona imagenes</label>
+          <input id="photoFiles" name="photoFiles" type="file" accept="image/*" multiple required />
+
+          <button type="submit" class="btn">Subir a Drive</button>
+          <p id="uploadStatus" class="status" aria-live="polite"></p>
         </form>
       </div>
-    </div>
+    </section>
 
-    <header class="topbar">
-      <div class="brand">XV de Regina</div>
-      <nav>
-        <button class="nav-link is-active" data-section="inicio">Inicio</button>
-        <button class="nav-link" data-section="subir">Sube tus imagenes</button>
-        <button class="nav-link" data-section="album">Album</button>
-      </nav>
-      <div id="guestBadge" class="guest-badge"></div>
-    </header>
+    <section id="album" class="view">
+      <div class="album-head">
+        <h2>Album de invitados</h2>
+        <button id="refreshAlbum" class="btn btn-outline" type="button">Actualizar</button>
+      </div>
+      <p id="albumStatus" class="status" aria-live="polite"></p>
+      <div id="albumContainer" class="album-groups"></div>
+    </section>
+  </main>
 
-    <main>
-      <section id="inicio" class="view is-active">
-        <div class="hero">
-          <h2>XV de Regina</h2>
-          <p>Comparte tus mejores momentos de la fiesta.</p>
-          <img
-            src="https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1600&auto=format&fit=crop"
-            alt="Celebracion XV"
-          />
-        </div>
-      </section>
+  <script src="app.js"></script>
+</body>
 
-      <section id="subir" class="view">
-        <div class="card">
-          <h2>Sube tus imagenes</h2>
-          <p class="muted">Tus fotos se guardarán con el nombre del invitado que inició sesión.</p>
-
-          <form id="uploadForm">
-            <label for="guestName">Nombre del invitado</label>
-            <input id="guestName" name="guestName" type="text" readonly />
-
-            <label for="photoFiles">Selecciona imagenes</label>
-            <input id="photoFiles" name="photoFiles" type="file" accept="image/*" multiple required />
-
-            <button type="submit" class="btn">Subir a Drive</button>
-            <p id="uploadStatus" class="status" aria-live="polite"></p>
-          </form>
-
-          <p class="hint">
-            Configura la URL de tu Web App de Google Apps Script en
-            <code>app.js</code> (const <code>DRIVE_WEB_APP_URL</code>).
-          </p>
-        </div>
-      </section>
-
-      <section id="album" class="view">
-        <div class="album-head">
-          <h2>Album de invitados</h2>
-          <button id="refreshAlbum" class="btn btn-outline" type="button">Actualizar</button>
-        </div>
-        <p id="albumStatus" class="status" aria-live="polite"></p>
-        <div id="albumContainer" class="album-groups"></div>
-      </section>
-    </main>
-
-    <script src="app.js"></script>
-  </body>
 </html>
