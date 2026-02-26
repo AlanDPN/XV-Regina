@@ -332,6 +332,22 @@ code {
   display: block;
 }
 
+.carousel-image--landscape {
+  max-height: min(58vh, 460px);
+}
+
+.carousel-image--portrait {
+  max-height: min(80vh, 700px);
+  max-width: min(100%, 460px);
+  justify-self: center;
+}
+
+.carousel-image--square {
+  max-height: min(64vh, 540px);
+  max-width: min(100%, 540px);
+  justify-self: center;
+}
+
 .carousel-btn {
   border: 1px solid var(--line);
   background: var(--surface);
@@ -387,5 +403,15 @@ code {
 
   .carousel-image {
     max-height: min(56vh, 420px);
+  }
+
+  .carousel-image--portrait {
+    max-height: min(66vh, 520px);
+    max-width: min(100%, 320px);
+  }
+
+  .carousel-image--square {
+    max-height: min(52vh, 360px);
+    max-width: min(100%, 320px);
   }
 }

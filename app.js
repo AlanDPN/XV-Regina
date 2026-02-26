@@ -212,6 +212,7 @@ function renderAlbum(groups) {
     const paintImage = () => {
       const current = photos[currentIndex];
       img.src = current.url;
+      img.onload = () => applyImageOrientationClass(img);
       img.onerror = () => {
         const driveId = extractDriveFileId(current.url);
         if (!driveId) return;
@@ -460,4 +461,25 @@ function paintThemeButton(darkModeEnabled) {
   if (!themeToggle) return;
   themeToggle.textContent = "☾";
   themeToggle.setAttribute("aria-label", darkModeEnabled ? "Activar modo claro" : "Activar modo oscuro");
+}
+
+function applyImageOrientationClass(img) {
+  const w = img.naturalWidth || 0;
+  const h = img.naturalHeight || 0;
+  if (!w || !h) return;
+
+  const ratio = w / h;
+  img.classList.remove("carousel-image--landscape", "carousel-image--portrait", "carousel-image--square");
+
+  if (ratio > 1.15) {
+    img.classList.add("carousel-image--landscape");
+    return;
+  }
+
+  if (ratio < 0.85) {
+    img.classList.add("carousel-image--portrait");
+    return;
+  }
+
+  img.classList.add("carousel-image--square");
 }
