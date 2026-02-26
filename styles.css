@@ -27,6 +27,10 @@ body.dark-mode {
   --surface: #111111;
   --black: #f2f2f2;
   --line: #2c2c2c;
+  background:
+    radial-gradient(circle at 10% -10%, #273024 0%, transparent 42%),
+    radial-gradient(circle at 95% 0%, #1b2118 0%, transparent 35%),
+    #0d0d0d;
 }
 
 .overlay {
@@ -90,6 +94,8 @@ nav {
 .header-tools {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
+  justify-content: flex-end;
   gap: 10px;
 }
 
@@ -105,8 +111,15 @@ nav {
   border: 1px solid var(--line);
   background: var(--surface);
   color: var(--black);
-  border-radius: 999px;
-  padding: 7px 12px;
+  border-radius: 12px;
+  width: 40px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  font-size: 1.45rem;
+  line-height: 1;
   font-weight: 500;
   cursor: pointer;
 }
@@ -355,13 +368,14 @@ code {
     flex: 1;
   }
 
-  .topbar {
+.topbar {
     justify-content: center;
   }
 
   .header-tools {
     width: 100%;
     justify-content: center;
+    row-gap: 8px;
   }
 
   .hero,

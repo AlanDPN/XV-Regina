@@ -189,13 +189,13 @@ function renderAlbum(groups) {
     const prevBtn = document.createElement("button");
     prevBtn.className = "carousel-btn";
     prevBtn.type = "button";
-    prevBtn.textContent = "←";
+    prevBtn.textContent = "<";
     prevBtn.setAttribute("aria-label", "Imagen anterior");
 
     const nextBtn = document.createElement("button");
     nextBtn.className = "carousel-btn";
     nextBtn.type = "button";
-    nextBtn.textContent = "→";
+    nextBtn.textContent = ">";
     nextBtn.setAttribute("aria-label", "Imagen siguiente");
 
     const img = document.createElement("img");
@@ -458,5 +458,6 @@ function toggleTheme() {
 
 function paintThemeButton(darkModeEnabled) {
   if (!themeToggle) return;
-  themeToggle.textContent = darkModeEnabled ? "Light mode" : "Dark mode";
+  themeToggle.textContent = "☾";
+  themeToggle.setAttribute("aria-label", darkModeEnabled ? "Activar modo claro" : "Activar modo oscuro");
 }
