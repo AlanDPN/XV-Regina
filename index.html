@@ -34,7 +34,10 @@
       <button class="nav-link" data-section="subir">Sube tus imagenes</button>
       <button class="nav-link" data-section="album">Album</button>
     </nav>
-    <div id="guestBadge" class="guest-badge"></div>
+    <div class="header-tools">
+      <button id="themeToggle" class="theme-toggle" type="button" aria-label="Cambiar tema">Dark mode</button>
+      <div id="guestBadge" class="guest-badge"></div>
+    </div>
   </header>
 
   <main>
@@ -57,7 +60,11 @@
           <input id="guestName" name="guestName" type="text" readonly />
 
           <label for="photoFiles">Selecciona imagenes</label>
-          <input id="photoFiles" name="photoFiles" type="file" accept="image/*" multiple required />
+          <div id="dropZone" class="drop-zone" tabindex="0">
+            <p>Arrastra tus imagenes aqui (PC) o haz clic para seleccionar.</p>
+            <input id="photoFiles" name="photoFiles" type="file" accept="image/*" multiple required />
+          </div>
+          <div id="uploadPreview" class="upload-preview"></div>
 
           <button type="submit" class="btn">Subir a Drive</button>
           <p id="uploadStatus" class="status" aria-live="polite"></p>

@@ -1,4 +1,4 @@
-﻿:root {
+:root {
   --primary: #919c7a;
   --white: #ffffff;
   --black: #111111;
@@ -20,6 +20,13 @@ body {
     radial-gradient(circle at 95% 0%, #e6eadf 0%, transparent 35%),
     var(--bg);
   min-height: 100vh;
+}
+
+body.dark-mode {
+  --bg: #111111;
+  --surface: #111111;
+  --black: #f2f2f2;
+  --line: #2c2c2c;
 }
 
 .overlay {
@@ -51,14 +58,14 @@ body {
 }
 
 .login-card p {
-  color: #505050;
+  color: color-mix(in srgb, var(--black) 70%, transparent);
 }
 
 .topbar {
   position: sticky;
   top: 0;
   z-index: 20;
-  background: rgba(255, 255, 255, 0.9);
+  background: color-mix(in srgb, var(--surface) 90%, transparent);
   backdrop-filter: blur(8px);
   border-bottom: 1px solid var(--line);
   padding: 14px 20px;
@@ -80,12 +87,28 @@ nav {
   gap: 8px;
 }
 
+.header-tools {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
 .guest-badge {
   border: 1px solid var(--line);
   border-radius: 999px;
   padding: 7px 12px;
-  background: #fff;
+  background: var(--surface);
   font-size: 0.9rem;
+}
+
+.theme-toggle {
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--black);
+  border-radius: 999px;
+  padding: 7px 12px;
+  font-weight: 500;
+  cursor: pointer;
 }
 
 .nav-link {
@@ -134,7 +157,7 @@ main {
 
 .hero p {
   margin: 8px 0 18px;
-  color: #4d4d4d;
+  color: color-mix(in srgb, var(--black) 72%, transparent);
 }
 
 .hero img {
@@ -159,7 +182,7 @@ h2 {
 
 .muted {
   margin: 0 0 18px;
-  color: #5a5a5a;
+  color: color-mix(in srgb, var(--black) 72%, transparent);
 }
 
 label {
@@ -171,11 +194,52 @@ label {
 input[type="text"],
 input[type="file"] {
   width: 100%;
-  border: 1px solid #b7b7b0;
-  background: #fff;
+  border: 1px solid color-mix(in srgb, var(--line) 85%, #909090);
+  background: var(--surface);
+  color: var(--black);
   border-radius: 10px;
   padding: 11px 12px;
   font: inherit;
+}
+
+.drop-zone {
+  border: 2px dashed var(--line);
+  border-radius: 12px;
+  padding: 14px;
+  background: var(--surface);
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.drop-zone p {
+  margin: 0 0 10px;
+  font-size: 0.92rem;
+  color: color-mix(in srgb, var(--black) 72%, transparent);
+}
+
+.drop-zone.is-dragging {
+  border-color: var(--primary);
+  background: color-mix(in srgb, var(--primary) 15%, var(--surface));
+}
+
+.upload-preview {
+  margin-top: 12px;
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+}
+
+.preview-item {
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  aspect-ratio: 1 / 1;
+}
+
+.preview-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .btn {
@@ -202,12 +266,12 @@ input[type="file"] {
 
 .hint {
   margin: 14px 0 0;
-  color: #5b5b5b;
+  color: color-mix(in srgb, var(--black) 72%, transparent);
   font-size: 0.92rem;
 }
 
 code {
-  background: #ededea;
+  background: color-mix(in srgb, var(--line) 45%, var(--surface));
   padding: 2px 6px;
   border-radius: 6px;
 }
@@ -233,22 +297,41 @@ code {
 }
 
 .group h3 {
-  margin: 0 0 10px;
+  margin: 0 0 12px;
   font-size: 1.08rem;
 }
 
-.photos {
+.carousel {
   display: grid;
-  gap: 10px;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  grid-template-columns: 42px 1fr 42px;
+  gap: 8px;
+  align-items: center;
 }
 
-.photos img {
+.carousel-image {
   width: 100%;
-  height: 140px;
+  height: 260px;
   object-fit: cover;
-  border-radius: 10px;
+  border-radius: 12px;
   border: 1px solid var(--line);
+  background: #000;
+}
+
+.carousel-btn {
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--black);
+  border-radius: 10px;
+  height: 42px;
+  width: 42px;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.carousel-count {
+  margin-top: 8px;
+  font-size: 0.88rem;
+  color: color-mix(in srgb, var(--black) 68%, transparent);
 }
 
 @keyframes fadeIn {
@@ -276,8 +359,17 @@ code {
     justify-content: center;
   }
 
+  .header-tools {
+    width: 100%;
+    justify-content: center;
+  }
+
   .hero,
   .card {
     padding: 16px;
+  }
+
+  .carousel-image {
+    height: 210px;
   }
 }

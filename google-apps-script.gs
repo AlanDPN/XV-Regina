@@ -30,7 +30,8 @@ function doPost(e) {
     savedFile.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
 
     const fileId = savedFile.getId();
-    const fileUrl = `https://drive.google.com/uc?export=view&id=${fileId}`;
+    // URL optimizada para mostrar imagenes en etiquetas <img>.
+    const fileUrl = `https://drive.google.com/thumbnail?id=${fileId}&sz=w1600`;
 
     const sheet = getSheet_();
     sheet.appendRow([new Date(), guestName, fileId, fileUrl]);
