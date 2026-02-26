@@ -11,53 +11,76 @@ const SHEET_ID = "1QExLRjC5hAeR7pZVi6iTkzEo7NmToBt0PSCKyZcPVig";
 const SHEET_NAME = "photos";
 
 function doPost(e) {
-  const guestName = (e.parameter.guestName || "Anonimo").trim();
-  const fileBlob = e.parameter.photo;
+  try {
+    const payload = parsePostPayload_(e);
+    const guestName = (payload.guestName || "Anonimo").toString().trim();
+    const fileName = (payload.fileName || "foto.jpg").toString();
+    const mimeType = (payload.mimeType || "image/jpeg").toString();
+    const dataBase64 = payload.dataBase64;
 
-  if (!fileBlob) {
-    return jsonResponse({ ok: false, message: "No se recibio archivo" });
+    if (!dataBase64) {
+      return jsonResponse({ ok: false, message: "No se recibio dataBase64" });
+    }
+
+    const bytes = Utilities.base64Decode(dataBase64);
+    const blob = Utilities.newBlob(bytes, mimeType, fileName);
+
+    const folder = DriveApp.getFolderById(FOLDER_ID);
+    const savedFile = folder.createFile(blob);
+    savedFile.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
+
+    const fileId = savedFile.getId();
+    const fileUrl = `https://drive.google.com/uc?export=view&id=${fileId}`;
+
+    const sheet = getSheet_();
+    sheet.appendRow([new Date(), guestName, fileId, fileUrl]);
+
+    return jsonResponse({ ok: true, fileId, fileUrl });
+  } catch (error) {
+    return jsonResponse({ ok: false, message: error.message || "Error interno en doPost" });
   }
-
-  const folder = DriveApp.getFolderById(FOLDER_ID);
-  const savedFile = folder.createFile(fileBlob);
-  savedFile.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
-
-  const fileId = savedFile.getId();
-  const fileUrl = `https://drive.google.com/uc?export=view&id=${fileId}`;
-
-  const sheet = getSheet_();
-  sheet.appendRow([new Date(), guestName, fileId, fileUrl]);
-
-  return jsonResponse({ ok: true, fileId, fileUrl });
 }
 
 function doGet(e) {
-  const action = (e.parameter.action || "").trim();
-  if (action !== "list") {
-    return jsonResponse({ ok: false, message: "Action invalida" });
+  try {
+    const action = (e.parameter.action || "").trim();
+    if (action !== "list") {
+      return jsonResponse({ ok: false, message: "Action invalida" });
+    }
+
+    const sheet = getSheet_();
+    const values = sheet.getDataRange().getValues();
+
+    const rows = values.slice(1); // header
+    const grouped = {};
+
+    rows.forEach((row) => {
+      const guestName = row[1];
+      const fileUrl = row[3];
+      if (!guestName || !fileUrl) return;
+
+      if (!grouped[guestName]) grouped[guestName] = [];
+      grouped[guestName].push({ url: fileUrl });
+    });
+
+    const groups = Object.keys(grouped).map((guestName) => ({
+      guestName,
+      photos: grouped[guestName],
+    }));
+
+    return jsonResponse({ ok: true, groups });
+  } catch (error) {
+    return jsonResponse({ ok: false, message: error.message || "Error interno en doGet" });
+  }
+}
+
+function parsePostPayload_(e) {
+  const contents = (e.postData && e.postData.contents) || "";
+  if (!contents) {
+    throw new Error("POST vacio");
   }
 
-  const sheet = getSheet_();
-  const values = sheet.getDataRange().getValues();
-
-  const rows = values.slice(1); // header
-  const grouped = {};
-
-  rows.forEach((row) => {
-    const guestName = row[1];
-    const fileUrl = row[3];
-    if (!guestName || !fileUrl) return;
-
-    if (!grouped[guestName]) grouped[guestName] = [];
-    grouped[guestName].push({ url: fileUrl });
-  });
-
-  const groups = Object.keys(grouped).map((guestName) => ({
-    guestName,
-    photos: grouped[guestName],
-  }));
-
-  return jsonResponse({ ok: true, groups });
+  return JSON.parse(contents);
 }
 
 function getSheet_() {

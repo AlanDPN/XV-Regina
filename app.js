@@ -65,17 +65,23 @@ uploadForm?.addEventListener("submit", async (event) => {
   try {
     setText(uploadStatus, "Subiendo imagenes...");
     for (const file of files) {
-      const fd = new FormData();
-      fd.append("guestName", name);
-      fd.append("photo", file);
+      const payload = await fileToPayload(name, file);
 
       const response = await fetch(DRIVE_WEB_APP_URL, {
         method: "POST",
-        body: fd,
+        headers: {
+          "Content-Type": "text/plain;charset=utf-8",
+        },
+        body: JSON.stringify(payload),
       });
 
       if (!response.ok) {
         throw new Error(`Error HTTP ${response.status}`);
+      }
+
+      const result = await response.json();
+      if (!result.ok) {
+        throw new Error(result.message || "Error en Apps Script al subir imagen");
       }
     }
 
@@ -85,7 +91,7 @@ uploadForm?.addEventListener("submit", async (event) => {
     await loadAlbum();
   } catch (error) {
     console.error(error);
-    setText(uploadStatus, "No se pudieron subir las imagenes. Revisa la configuracion de Apps Script.");
+    setText(uploadStatus, `No se pudieron subir las imagenes. ${error.message || "Revisa la configuracion de Apps Script."}`);
   }
 });
 
@@ -144,12 +150,34 @@ async function loadAlbum() {
     if (!response.ok) throw new Error(`Error HTTP ${response.status}`);
 
     const data = await response.json();
+    if (!data.ok) throw new Error(data.message || "Error al listar album");
     renderAlbum(data.groups || []);
     setText(albumStatus, data.groups?.length ? "" : "Aun no hay fotos en el album.");
   } catch (error) {
     console.error(error);
-    setText(albumStatus, "No fue posible cargar el album desde Drive.");
+    setText(albumStatus, `No fue posible cargar el album desde Drive. ${error.message || ""}`);
   }
+}
+
+async function fileToPayload(guestName, file) {
+  const dataUrl = await readAsDataURL(file);
+  const base64 = String(dataUrl).split(",")[1] || "";
+
+  return {
+    guestName,
+    fileName: file.name || `foto-${Date.now()}.jpg`,
+    mimeType: file.type || "image/jpeg",
+    dataBase64: base64,
+  };
+}
+
+function readAsDataURL(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = () => reject(new Error("No se pudo leer el archivo"));
+    reader.readAsDataURL(file);
+  });
 }
 
 function renderAlbum(groups) {
